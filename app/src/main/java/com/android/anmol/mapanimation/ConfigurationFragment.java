@@ -39,8 +39,8 @@ public class ConfigurationFragment extends AppCompatDialogFragment implements Vi
     public static ConfigurationFragment getConfFragment(String fromLoc, String toLoc) {
         ConfigurationFragment configurationFragment = new ConfigurationFragment();
         Bundle bundle = new Bundle(2);
-        bundle.putString(TO_LOCATION_KEY, fromLoc);
-        bundle.putString(FROM_LOCATION_KEY, toLoc);
+        bundle.putString(FROM_LOCATION_KEY, fromLoc);
+        bundle.putString(TO_LOCATION_KEY, toLoc);
         configurationFragment.setArguments(bundle);
         return configurationFragment;
     }
@@ -139,6 +139,15 @@ public class ConfigurationFragment extends AppCompatDialogFragment implements Vi
         }
     }
 
+    /**
+     * This  involves the network interaction.
+     * So DON"T DO it on main thread.
+     * <p>
+     * It is done here on main thread for simplicity.
+     *
+     * @param location Location to get the lat and lng from.
+     * @return Lat Lng values corresponding to the location.
+     */
     private LatLng getLatLngFrom(String location) {
         LatLng res = null;
         if (location != null && !location.isEmpty()) {

@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
         setContentView(R.layout.activity_main);
 
         // Load the map.
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new MapReadyListener());
+        ((SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map))
+                .getMapAsync(new MapReadyListener());
     }
 
 
@@ -82,20 +84,20 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
         mFromMarker = setMarker(fromLoc);
         mToMarker = setMarker(toLoc);
 
-        int googleMapPadding = getResources().getDimensionPixelOffset(R.dimen.google_map_padding);
         final LatLngBounds bounds = new LatLngBounds.Builder()
                 .include(fromLoc)
                 .include(toLoc)
                 .build();
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, googleMapPadding));
 
-        PolylineOptions line = new PolylineOptions()
+        mGoogleMap.animateCamera(CameraUpdateFactory
+                .newLatLngBounds(bounds, getResources().getDimensionPixelOffset(R.dimen.google_map_padding)));
+
+        mPolyLine = mGoogleMap.addPolyline(new PolylineOptions()
                 .add(fromLoc, toLoc)
                 .width(10)
-                .color(getResources().getColor(android.R.color.holo_red_dark));
-        mPolyLine = mGoogleMap.addPolyline(line);
+                .color(getResources().getColor(android.R.color.holo_red_dark)));
 
-        startAnimation(fromLoc, toLoc);
+        beginAnimation(fromLoc, toLoc);
     }
 
     /**
@@ -107,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
         if (mFromMarker != null) {
             mFromMarker.remove();
         }
-
         if (mToMarker != null) {
             mToMarker.remove();
         }
@@ -126,17 +127,17 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
     }
 
     /**
-     * Begin the animation.
+     * Starts the animation.
      *
      * @param fromLoc Animation to start from.
      * @param toLoc   Animation to end at.
      */
-    private void startAnimation(LatLng fromLoc, LatLng toLoc) {
+    private void beginAnimation(LatLng fromLoc, LatLng toLoc) {
         ObjectAnimator animator = (ObjectAnimator) getAnimator(fromLoc, toLoc);
         animator.setRepeatCount(ValueAnimator.INFINITE);
 
         mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.playTogether(animator);
+        mAnimatorSet.play(animator);
         mAnimatorSet.start();
     }
 
@@ -169,11 +170,11 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
      * @return time for the animation to persist.
      */
     private long getAnimationTime(LatLng fromLoc, LatLng toLoc) {
-        final double metreToKilometers = 0.001;
+        final double METRE_TO_KM_FACTOR = 0.001;
 
         final float[] dist = new float[1];
         Location.distanceBetween(fromLoc.latitude, fromLoc.longitude, toLoc.latitude, toLoc.longitude, dist);
-        return (long) (dist[0] * metreToKilometers);
+        return (long) (dist[0] * METRE_TO_KM_FACTOR);
     }
 
     /**
@@ -192,8 +193,9 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
                 .flat(true)
                 .visible(false) // Hidden in the starting.
                 .anchor(0.5f, 0.5f) // so that it is in the middle of the line.
-                .rotation(bearing[1])
+                .rotation(bearing[1]) // Rotate the up arrow(i.e. 0 degree by default) by the bearing degree value.
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_arrow));
+
         return mGoogleMap.addMarker(markerOptions);
     }
 
@@ -204,9 +206,7 @@ public class MainActivity extends AppCompatActivity implements OnConfigurationCa
      * @return {@link Marker} added to the google map.
      */
     Marker setMarker(LatLng pos) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(pos);
-        return mGoogleMap.addMarker(markerOptions);
+        return mGoogleMap.addMarker(new MarkerOptions().position(pos));
     }
 
     /**
