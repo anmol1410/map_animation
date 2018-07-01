@@ -4,4 +4,6 @@
     <string name="animate">animate</string>
     <string name="add_from_loc_msg">Add From location :</string>
     <string name="add_to_loc_msg">Add To Location :</string>
+    <string name="err_invalid_from_loc">Please enter a Valid FROM location</string>
+    <string name="err_invalid_to_loc">Please enter a Valid TO location</string>
 </resources>

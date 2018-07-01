@@ -4,7 +4,5 @@ import com.google.android.gms.maps.model.LatLng;
 
 interface OnConfigurationCallback {
 
-    void onLocationsEntered(LatLng fromLoc, LatLng toLoc);
-
-    void onCancancelled();
+    void onLocationsEntered(LatLng fromLoc, LatLng toLoc, String fromLocText, String toLocText);
 }
