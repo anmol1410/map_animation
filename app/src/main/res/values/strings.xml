@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MapAnimation</string>
+    <string name="menu_action_setting">configure</string>
+    <string name="animate">animate</string>
+    <string name="add_from_loc_msg">Add From location :</string>
+    <string name="add_to_loc_msg">Add To Location :</string>
+</resources>
